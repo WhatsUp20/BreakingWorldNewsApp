@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.breakingworldnewsapp.presentation.ui.welcome.WelcomeScreen
+import com.example.breakingworldnewsapp.presentation.ui.welcome.WelcomeScreenViewModel
 
 @Composable
 fun SetupNavGraph(
@@ -12,7 +13,7 @@ fun SetupNavGraph(
 ) {
     NavHost(navController = navController, startDestination =  Screens.WelcomeScreen.route) {
         composable(route = Screens.WelcomeScreen.route) {
-            WelcomeScreen()
+            WelcomeScreen(viewModel = WelcomeScreenViewModel())
         }
     }
 }
