@@ -1,11 +1,10 @@
 package com.example.breakingworldnewsapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.breakingworldnewsapp.presentation.ui.WelcomeScreen
+import com.example.breakingworldnewsapp.presentation.ui.welcome.WelcomeScreen
 
 @Composable
 fun SetupNavGraph(
@@ -13,7 +12,7 @@ fun SetupNavGraph(
 ) {
     NavHost(navController = navController, startDestination =  Screens.WelcomeScreen.route) {
         composable(route = Screens.WelcomeScreen.route) {
-            TODO("Add Welcome Screen")
+            WelcomeScreen()
         }
     }
 }
