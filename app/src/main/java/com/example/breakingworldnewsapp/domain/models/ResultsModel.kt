@@ -13,10 +13,6 @@ data class ResultsModel(
     @Expose
     val description: String? = null,
 
-    @SerializedName("full_description")
-    @Expose
-    val fullDescription: String? = null,
-
     @SerializedName("content")
     @Expose
     val content: String? = null,
@@ -27,5 +23,9 @@ data class ResultsModel(
 
     @SerializedName("language")
     @Expose
-    val language: String
+    val language: String,
+
+    @SerializedName("link")
+    @Expose
+    val link: String
 )

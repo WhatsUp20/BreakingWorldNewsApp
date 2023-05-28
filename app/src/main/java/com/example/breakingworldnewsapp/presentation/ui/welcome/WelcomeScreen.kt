@@ -3,6 +3,7 @@ package com.example.breakingworldnewsapp.presentation.ui.welcome
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import com.example.breakingworldnewsapp.R
 @Composable
 internal fun WelcomeScreen(
     viewModel: WelcomeScreenViewModel,
+    setArgs: (title: String, fullDesc: String, link: String) -> Unit
 ) {
 
     val viewState by viewModel.viewState.collectAsState()
@@ -43,7 +45,7 @@ internal fun WelcomeScreen(
         viewState.events.firstOrNull()?.let { event ->
             when (event) {
                 is WelcomeScreenViewState.Event.LoadFailure -> {
-                    Toast.makeText(context, "Error:  ${event.throwable}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error:  ${event.throwable}", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -88,10 +90,16 @@ internal fun WelcomeScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(180.dp)
+                                .clickable {
+                                    setArgs(
+                                        item.description ?: " ",
+                                        item.content ?: " ",
+                                        item.link ?: " "
+                                    )
+                                }
                         )
-
                     }
-                    Text(text = item.title, modifier = Modifier.padding(bottom = 12.dp))
+                    Text(text = item.title, modifier = Modifier.padding(bottom = 12.dp, start = 8.dp))
                     Divider(
                         color = Color.LightGray,
                         modifier = Modifier
@@ -108,5 +116,5 @@ internal fun WelcomeScreen(
 @Preview(showBackground = true)
 @Composable
 private fun WelcomeScreenPreview() {
-    WelcomeScreen(viewModel = WelcomeScreenViewModel())
+    WelcomeScreen(viewModel = WelcomeScreenViewModel(), { _, _, _ -> })
 }
