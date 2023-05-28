@@ -23,5 +23,9 @@ data class ResultsModel(
 
     @SerializedName("image_url")
     @Expose
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+
+    @SerializedName("language")
+    @Expose
+    val language: String
 )

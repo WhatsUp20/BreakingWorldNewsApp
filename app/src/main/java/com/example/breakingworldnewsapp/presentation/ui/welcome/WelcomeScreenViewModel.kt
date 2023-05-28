@@ -18,26 +18,31 @@ internal class WelcomeScreenViewModel : ViewModel() {
 
     private val getWorldNewsUseCase = GetWorldNewsUseCase(repositoryByData)
 
+    init {
+        loadWorldNews()
+    }
+
     fun nextEvent() {
         _viewState.update {
             it.copy(events = it.events.drop(1))
         }
     }
 
-    fun getWorldNews() {
+    private fun loadWorldNews() {
         viewModelScope.launch {
+        _viewState.update { it.copy(peekProgress = true) }
             getWorldNewsUseCase.getWorldNewsList()
                 .onSuccess { result ->
                     _viewState.update {
                         it.copy(
-                            worldNewsList = result.resultsModels,
-                            events = it.events + WelcomeScreenViewState.Event.LoadSuccessful
+                            worldNewsList = result.resultsModels
                         )
                     }
                 }
                 .onFailure { throwable ->
                     _viewState.update { it.copy(events = it.events + WelcomeScreenViewState.Event.LoadFailure(throwable)) }
                 }
+            _viewState.update { it.copy(peekProgress = false) }
         }
     }
 }

@@ -1,26 +1,40 @@
 package com.example.breakingworldnewsapp.presentation.ui.welcome
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import com.example.breakingworldnewsapp.R
 
 @Composable
-internal fun WelcomeScreen(viewModel: WelcomeScreenViewModel) {
+internal fun WelcomeScreen(
+    viewModel: WelcomeScreenViewModel,
+) {
 
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current
@@ -28,9 +42,6 @@ internal fun WelcomeScreen(viewModel: WelcomeScreenViewModel) {
     LaunchedEffect(viewState.events) {
         viewState.events.firstOrNull()?.let { event ->
             when (event) {
-                WelcomeScreenViewState.Event.LoadSuccessful -> {
-                    Toast.makeText(context, "Load Successful", Toast.LENGTH_SHORT).show()
-                }
                 is WelcomeScreenViewState.Event.LoadFailure -> {
                     Toast.makeText(context, "Error:  ${event.throwable}", Toast.LENGTH_SHORT).show()
                 }
@@ -41,24 +52,54 @@ internal fun WelcomeScreen(viewModel: WelcomeScreenViewModel) {
 
     Column(
         Modifier
-            .padding(horizontal = 20.dp, vertical = 20.dp)
+            .padding(vertical = 20.dp)
             .fillMaxSize()
     ) {
-        Button(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp), onClick = {
-            viewModel.getWorldNews()
-        }) {
-            Text(text = "Load Breaking News")
+        if (viewState.peekProgress) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+            ) {
+                CircularProgressIndicator()
+            }
         }
-        Spacer(modifier = Modifier.weight(1f))
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 20.dp)
+                .padding(top = 20.dp, bottom = 10.dp)
         ) {
             itemsIndexed(viewState.worldNewsList) { _, item ->
-                Text(text = item.title)
+                Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = if (item.imageUrl.isNullOrBlank()) {
+                                painterResource(id = R.drawable.placeholder)
+                            } else {
+                                rememberAsyncImagePainter(item.imageUrl)
+                            },
+                            contentScale = ContentScale.FillWidth,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(180.dp)
+                        )
+
+                    }
+                    Text(text = item.title, modifier = Modifier.padding(bottom = 12.dp))
+                    Divider(
+                        color = Color.LightGray,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         }
     }
