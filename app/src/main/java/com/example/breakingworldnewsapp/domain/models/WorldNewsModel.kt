@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class WorldNewsModel(
 
-    @SerializedName("results")
+    @SerializedName("articles")
     @Expose
-    var resultsModels: List<ResultsModel>
+    val resultsModels: List<ResultsModel>
 )

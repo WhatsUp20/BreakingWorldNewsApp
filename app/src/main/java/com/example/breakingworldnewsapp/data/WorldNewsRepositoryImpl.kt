@@ -10,7 +10,7 @@ object WorldNewsRepositoryImpl: WorldNewsRepository {
 
     override suspend fun getWorldNews(): Result<WorldNewsModel> {
         return runCatching {
-            apiFactory.apiService.getRussianNews()
+            apiFactory.apiService.getTopUsNews()
         }
     }
 }

@@ -19,32 +19,45 @@ fun SetupNavGraph(
 
     NavHost(navController = navController, startDestination = "welcome_screen") {
         composable(route = "welcome_screen") {
-            WelcomeScreen(viewModel = WelcomeScreenViewModel()) { title, fullDesc, link ->
+            WelcomeScreen(viewModel = WelcomeScreenViewModel()) { imageUrl, title, full_desc, source ->
                 runCatching {
-                    val encoderUrl = URLEncoder.encode(link, StandardCharsets.UTF_8.toString())
-                    navController.navigate(route = "detail_screen/$title&$fullDesc&$encoderUrl")
+                    val image = URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
+                    navController.navigate(route = "detail_screen/$image&$title&$full_desc&$source")
                 }
             }
         }
-        composable(route = "detail_screen/{title}&{fullDesc}&{link}", arguments = listOf(
+        composable(route = "detail_screen/{image}&{title}&{full_desc}&{source}", arguments = listOf(
+            navArgument("image") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
             navArgument("title") {
                 type = NavType.StringType
                 defaultValue = ""
             },
-            navArgument("fullDesc") {
+            navArgument("full_desc") {
                 type = NavType.StringType
                 defaultValue = ""
             },
-            navArgument("link") {
+            navArgument("source") {
                 type = NavType.StringType
                 defaultValue = ""
             }
 
         )) { backStackEntry ->
-            val title = backStackEntry.arguments?.getString("title")
-            val fullDesc = backStackEntry.arguments?.getString("fullDesc")
-            val link = backStackEntry.arguments?.getString("link")
-            DetailScreen(title = title ?: "Ошибочка", fullDesc = fullDesc ?: "Ошибочка описание", link = link ?: " ")
+            val image = backStackEntry.arguments?.getString("image")
+            val title = backStackEntry.arguments?.getString("title") ?: ""
+            val fullDesc = backStackEntry.arguments?.getString("full_desc") ?: ""
+            val source = backStackEntry.arguments?.getString("source") ?: ""
+
+            DetailScreen(
+                image = image,
+                title = title,
+                fullDesc = fullDesc,
+                sourceName = source
+            ) {
+                navController.popBackStack()
+            }
         }
     }
 }

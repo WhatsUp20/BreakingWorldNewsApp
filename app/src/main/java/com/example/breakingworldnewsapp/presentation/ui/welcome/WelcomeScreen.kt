@@ -4,16 +4,20 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -29,13 +33,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.breakingworldnewsapp.R
+import com.example.breakingworldnewsapp.presentation.ui.commonViews.TopicsItem
 
 @Composable
 internal fun WelcomeScreen(
     viewModel: WelcomeScreenViewModel,
-    setArgs: (title: String, fullDesc: String, link: String) -> Unit
+    setArgs: (imageUrl: String?, title: String, fullDesc: String, source: String) -> Unit
 ) {
 
     val viewState by viewModel.viewState.collectAsState()
@@ -56,6 +62,7 @@ internal fun WelcomeScreen(
         Modifier
             .padding(vertical = 20.dp)
             .fillMaxSize()
+            .statusBarsPadding()
     ) {
         if (viewState.peekProgress) {
             Box(
@@ -67,6 +74,21 @@ internal fun WelcomeScreen(
                 CircularProgressIndicator()
             }
         }
+        Column {
+            Column(Modifier.padding(horizontal = 12.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    TopicsItem(name = "CNN")
+                    TopicsItem(name = "Reuters")
+                    TopicsItem(name = "CBS News")
+                    TopicsItem(name = "Associated Press")
+                    TopicsItem(name = "Fox Business")
+                }
+            }
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -75,8 +97,7 @@ internal fun WelcomeScreen(
             itemsIndexed(viewState.worldNewsList) { _, item ->
                 Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
@@ -92,14 +113,19 @@ internal fun WelcomeScreen(
                                 .height(180.dp)
                                 .clickable {
                                     setArgs(
+                                        item.imageUrl,
+                                        item.title,
                                         item.description ?: " ",
-                                        item.content ?: " ",
-                                        item.link ?: " "
+                                        item.sourceModel.name
                                     )
                                 }
                         )
                     }
-                    Text(text = item.title, modifier = Modifier.padding(bottom = 12.dp, start = 8.dp))
+                    Text(
+                        text = item.title,
+                        fontSize = 17.sp,
+                        modifier = Modifier.padding(bottom = 12.dp, top = 12.dp, start = 8.dp)
+                    )
                     Divider(
                         color = Color.LightGray,
                         modifier = Modifier
@@ -116,5 +142,5 @@ internal fun WelcomeScreen(
 @Preview(showBackground = true)
 @Composable
 private fun WelcomeScreenPreview() {
-    WelcomeScreen(viewModel = WelcomeScreenViewModel(), { _, _, _ -> })
+    WelcomeScreen(viewModel = WelcomeScreenViewModel()) { _, _, _, _ -> }
 }

@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName
 
 data class ResultsModel(
 
+    @SerializedName("source")
+    @Expose
+    val sourceModel: SourceModel,
+
     @SerializedName("title")
     @Expose
     val title: String,
@@ -13,11 +17,7 @@ data class ResultsModel(
     @Expose
     val description: String? = null,
 
-    @SerializedName("content")
-    @Expose
-    val content: String? = null,
-
-    @SerializedName("image_url")
+    @SerializedName("urlToImage")
     @Expose
     val imageUrl: String? = null,
 
@@ -27,5 +27,12 @@ data class ResultsModel(
 
     @SerializedName("link")
     @Expose
-    val link: String
+    val link: String,
+)
+
+data class SourceModel(
+
+    @SerializedName("name")
+    @Expose
+    val name: String
 )
