@@ -40,7 +40,7 @@ import com.example.breakingworldnewsapp.presentation.ui.commonViews.TopicsItem
 
 @Composable
 internal fun WelcomeScreen(
-    viewModel: WelcomeScreenViewModel,
+    viewModel: WelcomeScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     setArgs: (imageUrl: String?, title: String, fullDesc: String, source: String) -> Unit
 ) {
 
@@ -116,7 +116,7 @@ internal fun WelcomeScreen(
                                         item.imageUrl,
                                         item.title,
                                         item.description ?: " ",
-                                        item.sourceModel.name
+                                        item.source.name
                                     )
                                 }
                         )
@@ -142,5 +142,5 @@ internal fun WelcomeScreen(
 @Preview(showBackground = true)
 @Composable
 private fun WelcomeScreenPreview() {
-    WelcomeScreen(viewModel = WelcomeScreenViewModel()) { _, _, _, _ -> }
+    WelcomeScreen() { _, _, _, _ -> }
 }

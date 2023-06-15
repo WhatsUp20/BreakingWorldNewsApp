@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.breakingworldnewsapp.presentation.ui.detail.DetailScreen
 import com.example.breakingworldnewsapp.presentation.ui.welcome.WelcomeScreen
-import com.example.breakingworldnewsapp.presentation.ui.welcome.WelcomeScreenViewModel
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -19,7 +18,7 @@ fun SetupNavGraph(
 
     NavHost(navController = navController, startDestination = "welcome_screen") {
         composable(route = "welcome_screen") {
-            WelcomeScreen(viewModel = WelcomeScreenViewModel()) { imageUrl, title, full_desc, source ->
+            WelcomeScreen() { imageUrl, title, full_desc, source ->
                 runCatching {
                     val image = URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
                     navController.navigate(route = "detail_screen/$image&$title&$full_desc&$source")
