@@ -34,13 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.breakingworldnewsapp.R
 import com.example.breakingworldnewsapp.presentation.ui.commonViews.TopicsItem
 
 @Composable
-internal fun WelcomeScreen(
-    viewModel: WelcomeScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+fun WelcomeScreen(
+    viewModel: WelcomeScreenViewModel = hiltViewModel(),
     setArgs: (imageUrl: String?, title: String, fullDesc: String, source: String) -> Unit
 ) {
 

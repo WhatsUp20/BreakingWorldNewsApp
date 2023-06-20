@@ -3,10 +3,10 @@ package com.example.breakingworldnewsapp.presentation.ui.welcome
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.breakingworldnewsapp.data.WorldNewsRepositoryImpl
 import com.example.breakingworldnewsapp.data.database.AppDatabase
 import com.example.breakingworldnewsapp.domain.GetWorldNewsUseCase
 import com.example.breakingworldnewsapp.domain.models.WorldNewsModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,14 +15,16 @@ import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
-internal class WelcomeScreenViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class WelcomeScreenViewModel @Inject constructor(
+    application: Application,
+    private val getWorldNewsUseCase: GetWorldNewsUseCase
+) : AndroidViewModel(application) {
 
     private val _viewState = MutableStateFlow(WelcomeScreenViewState())
     val viewState = _viewState.asStateFlow()
-
-    private val repositoryByData = WorldNewsRepositoryImpl(application)
-    private val getWorldNewsUseCase = GetWorldNewsUseCase(repositoryByData)
 
     private val db = AppDatabase.getInstance(application)
     private val worldNewsList = db.worldNewsInfoDao()

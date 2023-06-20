@@ -1,4 +1,4 @@
-package com.example.breakingworldnewsapp.data.api
+package com.example.breakingworldnewsapp.data.remote
 
 import com.example.breakingworldnewsapp.domain.models.WorldNewsModel
 import retrofit2.http.GET
