@@ -4,11 +4,9 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -37,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.breakingworldnewsapp.R
-import com.example.breakingworldnewsapp.presentation.ui.commonViews.TopicsItem
 
 @Composable
 fun WelcomeScreen(
@@ -73,21 +69,6 @@ fun WelcomeScreen(
                     .background(Color.White)
             ) {
                 CircularProgressIndicator()
-            }
-        }
-        Column {
-            Column(Modifier.padding(horizontal = 12.dp)) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState())
-                ) {
-                    TopicsItem(name = "CNN")
-                    TopicsItem(name = "Reuters")
-                    TopicsItem(name = "CBS News")
-                    TopicsItem(name = "Associated Press")
-                    TopicsItem(name = "Fox Business")
-                }
             }
         }
         LazyColumn(
