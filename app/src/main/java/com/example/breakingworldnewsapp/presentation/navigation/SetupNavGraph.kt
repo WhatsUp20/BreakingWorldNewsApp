@@ -11,21 +11,25 @@ import com.example.breakingworldnewsapp.presentation.ui.welcome.WelcomeScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+object MainDestination {
+    const val HOME_SCREEN = "home"
+    const val DETAIL_SCREEN = "detail"
+    const val FAVORITES_SCREEN = "favorites"
+}
+
 @Composable
 fun SetupNavGraph(
     navController: NavHostController
 ) {
 
-    NavHost(navController = navController, startDestination = "welcome_screen") {
-        composable(route = "welcome_screen") {
-            WelcomeScreen() { imageUrl, title, full_desc, source ->
-                runCatching {
-                    val image = URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
-                    navController.navigate(route = "detail_screen/$image&$title&$full_desc&$source")
-                }
+    NavHost(navController = navController, startDestination = MainDestination.HOME_SCREEN) {
+        composable(route = MainDestination.HOME_SCREEN) {
+            WelcomeScreen { imageUrl, title, full_desc, source ->
+                val image = URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
+                navController.navigate(route = "${MainDestination.DETAIL_SCREEN}/$image&$title&$full_desc&$source")
             }
         }
-        composable(route = "detail_screen/{image}&{title}&{full_desc}&{source}", arguments = listOf(
+        composable(route = "${MainDestination.DETAIL_SCREEN}/{image}&{title}&{full_desc}&{source}", arguments = listOf(
             navArgument("image") {
                 type = NavType.StringType
                 defaultValue = ""
