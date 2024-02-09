@@ -25,7 +25,7 @@ fun SetupNavGraph(
     NavHost(navController = navController, startDestination = MainDestination.HOME_SCREEN) {
         composable(route = MainDestination.HOME_SCREEN) {
             WelcomeScreen { imageUrl, title, full_desc, source ->
-                val image = URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString())
+                val image = imageUrl?.let { URLEncoder.encode(imageUrl, StandardCharsets.UTF_8.toString()) } ?: " "
                 navController.navigate(route = "${MainDestination.DETAIL_SCREEN}/$image&$title&$full_desc&$source")
             }
         }
