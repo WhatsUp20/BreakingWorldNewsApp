@@ -1,5 +1,6 @@
 package com.example.breakingworldnewsapp.presentation.ui.detail
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.breakingworldnewsapp.R
+import com.example.breakingworldnewsapp.ui.theme.LightError
 
 @Composable
 internal fun DetailScreen(
@@ -50,7 +54,13 @@ internal fun DetailScreen(
     fullDesc: String,
     onBackAction: () -> Unit
 ) {
-    DetailScreenContent(image, sourceName, title, fullDesc, onBackAction)
+    DetailScreenContent(
+        image,
+        sourceName,
+        title,
+        fullDesc,
+        onBackAction
+    )
 }
 
 @Composable
@@ -62,8 +72,9 @@ private fun DetailScreenContent(
     onBackAction: () -> Unit
 ) {
 
+    val intent = Intent()
     val context = LocalContext.current
-    var isFavourite by remember { mutableStateOf<Boolean>(false) }
+    var isFavourite by remember { mutableStateOf(false) }
 
     Column(
         Modifier
@@ -75,8 +86,7 @@ private fun DetailScreenContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
-            contentAlignment = Alignment.TopStart
+                .height(200.dp), contentAlignment = Alignment.TopStart
         ) {
             Image(
                 painter = if (image.isNullOrBlank()) {
@@ -88,29 +98,26 @@ private fun DetailScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.FillWidth
             )
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
+            Icon(imageVector = Icons.Default.ArrowBack,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
                     .padding(top = 12.dp, start = 12.dp)
                     .size(40.dp)
-                    .clickable { onBackAction() }
-            )
+                    .clickable { onBackAction() })
         }
         Column(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row() {
+            Row {
                 SourceItem(name = sourceName)
                 Box(
                     Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterVertically)
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
+                    Icon(imageVector = Icons.Filled.Favorite,
                         contentDescription = null,
                         tint = if (isFavourite) Color.Red else Color.DarkGray,
                         modifier = Modifier
@@ -119,14 +126,45 @@ private fun DetailScreenContent(
                             .clickable {
                                 isFavourite = !isFavourite
                                 if (isFavourite) {
-                                    Toast.makeText(context, "Add favorites", Toast.LENGTH_LONG).show()
+                                    Toast
+                                        .makeText(context, "Add favorites", Toast.LENGTH_LONG)
+                                        .show()
                                 }
-                            }
-                    )
+                            })
                 }
             }
             Text(text = title, fontSize = 24.sp)
             Text(text = fullDesc, fontSize = 17.sp)
+            Box(
+                Modifier
+                    .padding(top = 14.dp, end = 8.dp)
+                    .sizeIn(minWidth = 132.dp, minHeight = 32.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(LightError)
+                    .clickable {
+                        intent.apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, fullDesc)
+                            type = "text/plain"
+                        }
+                        context.startActivity(intent)
+                    }
+            ) {
+                Row(Modifier.align(Alignment.Center)) {
+                    Text(
+                        text = "Share",
+                        Modifier.padding(end = 12.dp),
+                        color = Color.White,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
         }
     }
 }
