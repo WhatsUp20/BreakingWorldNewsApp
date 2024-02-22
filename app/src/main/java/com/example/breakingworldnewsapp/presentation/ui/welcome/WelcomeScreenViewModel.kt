@@ -45,7 +45,7 @@ class WelcomeScreenViewModel @Inject constructor(
     }
 
     private fun getAllNewsFromDB(coroutineScope: CoroutineScope, throwable: Throwable) {
-        val job = coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             getWorldNewsUseCase.getWorldNewsFromDb().collect { news ->
                 _viewState.update { it.copy(
                     worldNewsList = news,
@@ -53,6 +53,5 @@ class WelcomeScreenViewModel @Inject constructor(
                 ) }
             }
         }
-        if (_viewState.value.worldNewsList.isNotEmpty()) job.cancel()
     }
 }
