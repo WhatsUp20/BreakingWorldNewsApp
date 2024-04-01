@@ -97,7 +97,7 @@ fun WelcomeScreen(
                                     setArgs(
                                         item.imageUrl,
                                         item.title,
-                                        item.description ?: " ",
+                                        item.description,
                                         item.source.name
                                     )
                                 }

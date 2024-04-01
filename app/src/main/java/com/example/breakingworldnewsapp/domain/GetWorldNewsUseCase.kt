@@ -2,7 +2,7 @@ package com.example.breakingworldnewsapp.domain
 
 import com.example.breakingworldnewsapp.domain.models.ResultsModel
 import com.example.breakingworldnewsapp.domain.models.WorldNewsModel
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 class GetWorldNewsUseCase(private val worldNewsRepository: WorldNewsRepository) {
 
@@ -10,7 +10,7 @@ class GetWorldNewsUseCase(private val worldNewsRepository: WorldNewsRepository) 
         return worldNewsRepository.getWorldNews()
     }
 
-     fun getWorldNewsFromDb(): StateFlow<List<ResultsModel>> {
+     suspend fun getWorldNewsFromDb(): Flow<List<ResultsModel>> {
         return worldNewsRepository.getWorldNewsFromDb()
     }
 }

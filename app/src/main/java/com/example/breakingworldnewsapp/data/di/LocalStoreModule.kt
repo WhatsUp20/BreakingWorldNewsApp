@@ -1,7 +1,7 @@
 package com.example.breakingworldnewsapp.data.di
 
+import com.example.breakingworldnewsapp.data.local.LocalWorldNewsStore
 import com.example.breakingworldnewsapp.data.local.LocalWorldNewsStoreImpl
-import com.example.breakingworldnewsapp.data.remote.LocalWorldNewsStore
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

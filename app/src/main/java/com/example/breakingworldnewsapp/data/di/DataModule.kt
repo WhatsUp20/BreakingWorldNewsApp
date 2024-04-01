@@ -1,8 +1,8 @@
 package com.example.breakingworldnewsapp.data.di
 
 import com.example.breakingworldnewsapp.data.WorldNewsRepositoryImpl
+import com.example.breakingworldnewsapp.data.local.LocalWorldNewsStore
 import com.example.breakingworldnewsapp.data.remote.ApiService
-import com.example.breakingworldnewsapp.data.remote.LocalWorldNewsStore
 import com.example.breakingworldnewsapp.domain.WorldNewsRepository
 import dagger.Module
 import dagger.Provides

@@ -1,11 +1,14 @@
 package com.example.breakingworldnewsapp.data
 
+import com.example.breakingworldnewsapp.data.local.LocalWorldNewsStore
+import com.example.breakingworldnewsapp.data.mapper.toModel
+import com.example.breakingworldnewsapp.data.mapper.toRemote
 import com.example.breakingworldnewsapp.data.remote.ApiService
-import com.example.breakingworldnewsapp.data.remote.LocalWorldNewsStore
 import com.example.breakingworldnewsapp.domain.WorldNewsRepository
 import com.example.breakingworldnewsapp.domain.models.ResultsModel
 import com.example.breakingworldnewsapp.domain.models.WorldNewsModel
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,7 +21,7 @@ class WorldNewsRepositoryImpl @Inject constructor(
 
     override suspend fun getWorldNews(): Result<WorldNewsModel> {
         return runCatching {
-            apiFactory.getTopNews()
+            apiFactory.getTopNews().toModel()
         }.onSuccess { result ->
             saveNews(result)
         }.onFailure {
@@ -26,13 +29,13 @@ class WorldNewsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getWorldNewsFromDb(): StateFlow<List<ResultsModel>> {
-        return localWorldNewsStore.getAllWorldNews()
+    override suspend fun getWorldNewsFromDb(): Flow<List<ResultsModel>> {
+        return localWorldNewsStore.getAllWorldNews().map { remotes -> remotes.map { it.toModel() } }
     }
 
     private suspend fun saveNews(worldNewsModel: WorldNewsModel) {
         localWorldNewsStore.deleteAllWorldNews()
-        localWorldNewsStore.saveAllWorldNews(worldNewsModel.resultsModels)
+        localWorldNewsStore.saveAllWorldNews(worldNewsModel.resultsModels.map { it.toRemote() })
     }
 }
 
